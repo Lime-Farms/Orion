@@ -4,6 +4,7 @@ if __FILE__.start_with? "bin/"
   $:.unshift "./lib"
 end
 
+require "json"
 require "optparse"
 require "orion"
 
@@ -14,11 +15,15 @@ begin
     File.join Dir.home, ".orion.conf"
   end
 
-  opts = { cnf: default_config }
+  opts = { cnf: default_config, json: false }
 
   OptionParser.new do |options|
-    options.on "-c", "--config", "specify an alternative conf file" do |c|
+    options.on "-c", "--conf=FILE", "specify an alternative conf file" do |c|
       opts[:cnf] = c
+    end
+
+    options.on "-j", "--json", "output result as JSON" do
+      opts[:json] = true
     end
   end.parse!
 
@@ -26,7 +31,9 @@ begin
     raise "no command provided"
   end
 
-  cnf = File.open opts[:cnf], &:read
+  cnf = File.open opts[:cnf] do |file|
+    JSON.parse file.read, symbolize_names: true
+  end
 
   cmd = Orion::Command.descendants.detect do |_cmd|
     _cmd.to_s.split("::").last.downcase.start_with? ARGV.first.downcase
@@ -36,6 +43,6 @@ begin
     raise "unknown command #{ARGV.first}"
   end
 
-  action = cmd.new **opts, cmd: cmd, cnf: cnf
-  action.run
+  action = cmd.new **cnf
+  action.run **opts
 end
