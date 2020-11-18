@@ -5,7 +5,7 @@ module Orion
   class Abilities < Command
     def run(json: false, **opts)
       url = Api::url "auth", "info"
-      res = Api::get(url: url, key: @key)
+      res = Api::get url: url, key: @key
 
       data = JSON.parse res.body, symbolize_names: true
 
