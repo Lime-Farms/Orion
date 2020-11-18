@@ -36,5 +36,6 @@ begin
     raise "unknown command #{ARGV.first}"
   end
 
-  cmd.new **opts, cmd: cmd, cnf: cnf
+  action = cmd.new **opts, cmd: cmd, cnf: cnf
+  action.run
 end
