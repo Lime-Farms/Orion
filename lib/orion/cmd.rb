@@ -5,5 +5,9 @@ module Orion
         klass < self
       end
     end
+
+    def run
+      raise NotImplementedError, "this command is not implemented"
+    end
   end
 end
