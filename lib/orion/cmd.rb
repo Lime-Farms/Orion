@@ -6,6 +6,10 @@ module Orion
       end
     end
 
+    def initialize(key: nil)
+      @key = key
+    end
+
     def run
       raise NotImplementedError, "this command is not implemented"
     end

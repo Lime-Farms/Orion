@@ -3,10 +3,6 @@ require "tty-table"
 
 module Orion
   class Abilities < Command
-    def initialize(key: nil)
-      @key = key
-    end
-
     def run(json: false, **opts)
       url = Api::url "auth", "info"
       res = Api::get(url: url, key: @key)
