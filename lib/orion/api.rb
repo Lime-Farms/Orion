@@ -1,3 +1,4 @@
+require "json"
 require "net/http"
 require "uri"
 
@@ -31,7 +32,7 @@ module Orion
       unless res.code.to_i == 200
         raise Error::ApiFailure, res
       else
-        res
+        JSON.parse res.body, symbolize_names: true
       end
     end
   end

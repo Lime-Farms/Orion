@@ -7,14 +7,12 @@ module Orion
       url = Api::url "auth", "info"
       res = Api::get url: url, key: @key
 
-      data = JSON.parse res.body, symbolize_names: true
-
       if json
-        data.merge({ success: true })
+        res
       else
         entries = {
           header: ["name", "email", "roles"],
-          rows: [[data[:name], data[:email], data[:acls].join(", ")]]
+          rows: [[res[:name], res[:email], res[:acls].join(", ")]]
         }
 
         table = TTY::Table.new **entries
