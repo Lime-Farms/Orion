@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+if __FILE__.start_with? "bin/"
+  $:.unshift "./lib"
+end
+
+require "optparse"
+require "orion"
+
+begin
+  default_config = if ENV.key? "XDG_CONFIG_HOME"
+    File.join XDG_CONFIG_HOME, "orion.cnf"
+  else
+    File.join Dir.home, ".orion.conf"
+  end
+
+  opts = { cnf: default_config }
+
+  OptionParser.new do |options|
+    options.on "-c", "--config", "specify an alternative conf file" do |c|
+      opts[:cnf] = c
+    end
+  end.parse!
+
+  if ARGV.empty?
+    raise "no command provided"
+  end
+
+  cnf = File.open opts[:cnf], &:read
+
+  cmd = Orion::Command.descendants.detect do |_cmd|
+    _cmd.to_s.split("::").last.downcase.start_with? ARGV.first.downcase
+  end
+
+  unless cmd
+    raise "unknown command #{ARGV.first}"
+  end
+
+  cmd.new **opts, cmd: cmd, cnf: cnf
+end
