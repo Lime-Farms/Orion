@@ -14,7 +14,7 @@ module Orion
       "#{NAME}/#{VERSION}".freeze
     end
 
-    def self.get(url: nil, key: nil)
+    def self.get(url: nil, key: nil, decode: true)
       if url.nil?
         raise Error::Missing, "url"
       elsif key.nil?
@@ -32,7 +32,11 @@ module Orion
       unless res.code.to_i == 200
         raise Error::ApiFailure, res
       else
-        JSON.parse res.body, symbolize_names: true
+        if decode
+          JSON.parse res.body, symbolize_names: true
+        else
+          res.body
+        end
       end
     end
   end
