@@ -36,7 +36,7 @@ begin
   end
 
   cmd = Orion::Command.descendants.detect do |_cmd|
-    _cmd.to_s.split("::").last.downcase.start_with? ARGV.first.downcase
+    _cmd.cmd.split("::").last.downcase.start_with? ARGV.first.downcase
   end
 
   unless cmd

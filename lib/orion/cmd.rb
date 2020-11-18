@@ -1,5 +1,9 @@
 module Orion
   class Command
+    def self.cmd
+      self.name
+    end
+
     def self.descendants
       ObjectSpace.each_object(Class).select do |klass|
         klass < self
