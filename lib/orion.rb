@@ -10,3 +10,4 @@ require "orion/error"
 
 # frontend commands
 require "orion/abilities"
+require "orion/ls"
