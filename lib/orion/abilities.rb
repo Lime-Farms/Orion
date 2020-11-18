@@ -8,7 +8,7 @@ module Orion
       res = Api::get url: url, key: @key
 
       if json
-        res
+        puts JSON.dump(res)
       else
         entries = {
           header: ["name", "email", "roles"],
